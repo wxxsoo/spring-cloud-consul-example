@@ -1,0 +1,28 @@
+server:
+  port: 9100
+spring:
+  profiles:
+    active: local
+  application:
+    name: gateway-service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckInterval: 15s
+      config:
+        format: FILES
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: hello-service
+          uri: lb://hello-service
+          predicates:
+            - Path=/hello/**
+        - id: world-service
+          uri: lb://world-service
+          predicates:
+            - Path=/world/**
